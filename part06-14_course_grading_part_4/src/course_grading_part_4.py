@@ -24,7 +24,7 @@ def old_course_info2(filename):
             index+=1
         print(current_line+" credits")
 
-old_course_info2(course_info)
+# old_course_info2(course_info)
 
         #     if current_line: #True
         #         current_line += ", " + line[-1]+ " credits"
@@ -39,10 +39,11 @@ def course_info2(filename):
     with open(filename) as file:
         result = ""
         for i,line in enumerate(file):
-            result=result + line.strip().split(": ", 2)[1] 
-            if i ==0: result+=", "
-                
-    return result +" credits"
+            result=result + line.strip().split(": ", 1)[1] #setting the maxsplit parameter to 2, will return a list with 2 elements!
+            if i ==0: result+=", "   
+        print(result +" credits")
+#小吴        
+course_info2(course_info)    
 
 def sign():
     result="======================================"

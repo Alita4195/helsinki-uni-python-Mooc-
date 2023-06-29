@@ -33,10 +33,10 @@ def find_words(search_term: str):
 
         return match_list
 if __name__ == "__main__":
-    #print(find_words("ca."))
+    print(find_words("ca."))
     #print(find_words("cat"))
-    print(find_words("reson*"))
-    print(find_words("*okes"))
+    # print(find_words("reson*"))
+    # print(find_words("*okes"))
 
 
 
