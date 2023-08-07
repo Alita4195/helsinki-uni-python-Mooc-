@@ -1,45 +1,62 @@
-# Write your solution here
-# import urllib.request
-# import json
-
-
-# my_request = urllib.request.urlopen("https://studies.cs.helsinki.fi/stats-mock/api/courses")
-# data = my_request.read().decode('utf-8')
-# courses = json.loads(data)
-# #print(courses)
-
-
-# def retrieve_all():
-#     final_course_list=[]
-#     course_list=[]
-#     for course in courses:
-#         #print(course["enabled"])输出许多行False\True
-#         if course["enabled"]=="True":
-#             course_list.append(course["fullName"],course["name"], course["year"],course["exercises"])
-#             print(course_list)
-#             # final_course_list=",".join(course_list)
-#             # print(final_course_list)
-
 import urllib.request
 import json
 
 def retrieve_all():
     url = "https://studies.cs.helsinki.fi/stats-mock/api/courses"
-    my_request= urllib.request.urlopen(url)
+    my_request = urllib.request.urlopen(url)
+    response = my_request.read()
+    courses = json.loads(response)
     
-    #type(my_request) #<class 'http.client.HTTPResponse'>
-    data=my_request.read()
-
-    courses = json.loads(data)
-
     active_courses = []
-    for course in courses:
-        if course["enabled"] == "true":
-            active_courses.append(course["fullName"], course["name"], course["year"], sum(course["exercises"]))
+    item=0
     
-    print(active_courses)
+        
+    for course in courses:
+        if course["enabled"]:
+            active_courses.append((course["fullName"], course["name"], course["year"], sum(course["exercises"])))
 
-retrieve_all()
+            
+    return active_courses
+
+
+
+def retrieve_course(course_name: str):
+    url = f"https://studies.cs.helsinki.fi/stats-mock/api/courses/{course_name}/stats"
+    my_request = urllib.request.urlopen(url)
+    response = my_request.read()
+    data = json.loads(response)  # Parse JSON response directly as a dictionary
+
+    weeks = len(data)
+    exercises = 0
+    students = 0
+    hour_total = 0
+    
+    for week_data in data.values():
+        exercises += week_data["exercise_total"]
+        students = max(students, week_data["students"])
+        hour_total += week_data["hour_total"]
+    
+    exercises_average = exercises // students
+    hours_average = hour_total // students
+    
+    course_stats = {
+        "weeks": weeks,
+        "students": students,
+        "hours": hour_total,
+        "hours_average": hours_average,
+        "exercises": exercises,
+        "exercises_average": exercises_average
+    }
+    
+    return course_stats
+    
+if __name__ == "__main__":
+    result=retrieve_all()
+    print(result)
+    course_stats = retrieve_course("docker2019")
+    print(course_stats)
+
+
 
 
 
